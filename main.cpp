@@ -23,6 +23,7 @@ void display_trip(const list<Goat> &trip);
 void find_goat(const list<Goat> &trip, const string &name);
 void count_goats(const list<Goat> &trip, const string &color);
 void youngest_goat(const list<Goat> &trip);
+void oldest_goat(const list<Goat> &trip);
 int main_menu();
 
 int main() {
@@ -44,7 +45,7 @@ int main() {
     }
 
     int choice;
-    while ((choice = main_menu()) != 7) {
+    while ((choice = main_menu()) != 8) {
         switch (choice) {
             case 1:
                 add_goat(trip, names, colors);
@@ -75,6 +76,9 @@ int main() {
             }
             case 6:
                 youngest_goat(trip);
+                break;
+            case 7:
+                oldest_goat(trip);
                 break;
         }
     }
@@ -112,9 +116,9 @@ bool read_number(const string &prompt, int low, int high, int &value) {
 int main_menu() {
     cout << "\n*** GOAT MANAGER ***\n"
          << "[1] Add a goat\n[2] Delete a goat\n[3] List goats\n"
-         << "[4] Find a goat by name\n[5] Count goats by color\n[6] Show the youngest goat\n[7] Quit\n";
-    int choice = 7;
-    read_number("Choice --> ", 1, 7, choice);
+         << "[4] Find a goat by name\n[5] Count goats by color\n[6] Show the youngest goat\n[7] Show the oldest goat\n[8] Quit\n";
+    int choice = 8;
+    read_number("Choice --> ", 1, 8, choice);
     return choice;
 }
 
@@ -190,5 +194,18 @@ void youngest_goat(const list<Goat> &trip) {
         return a.get_age() < b.get_age();
     });
     cout << "Youngest goat: " << it->get_name() << " (" << it->get_age()
+         << ", " << it->get_color() << ")\n";
+}
+
+// show the first goat with the highest age
+void oldest_goat(const list<Goat> &trip) {
+    if (trip.empty()) {
+        cout << "No goats in the herd.\n";
+        return;
+    }
+    auto it = max_element(trip.begin(), trip.end(), [](const Goat &a, const Goat &b) {
+        return a.get_age() < b.get_age();
+    });
+    cout << "Oldest goat: " << it->get_name() << " (" << it->get_age()
          << ", " << it->get_color() << ")\n";
 }
