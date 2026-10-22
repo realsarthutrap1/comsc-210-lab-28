@@ -26,6 +26,7 @@ void count_goats(const list<Goat> &trip, const string &color);
 void youngest_goat(const list<Goat> &trip);
 void oldest_goat(const list<Goat> &trip);
 void total_age(const list<Goat> &trip);
+void any_older(const list<Goat> &trip, int age);
 int main_menu();
 
 int main() {
@@ -47,7 +48,7 @@ int main() {
     }
 
     int choice;
-    while ((choice = main_menu()) != 9) {
+    while ((choice = main_menu()) != 10) {
         switch (choice) {
             case 1:
                 add_goat(trip, names, colors);
@@ -85,6 +86,14 @@ int main() {
             case 8:
                 total_age(trip);
                 break;
+            case 9: {
+                int age;
+                if (!read_number("Age (0-20): ", 0, MAX_AGE, age)) {
+                    return 0;
+                }
+                any_older(trip, age);
+                break;
+            }
         }
     }
     cout << "Goodbye!\n";
@@ -121,9 +130,9 @@ bool read_number(const string &prompt, int low, int high, int &value) {
 int main_menu() {
     cout << "\n*** GOAT MANAGER ***\n"
          << "[1] Add a goat\n[2] Delete a goat\n[3] List goats\n"
-         << "[4] Find a goat by name\n[5] Count goats by color\n[6] Show the youngest goat\n[7] Show the oldest goat\n[8] Show total herd age\n[9] Quit\n";
-    int choice = 9;
-    read_number("Choice --> ", 1, 9, choice);
+         << "[4] Find a goat by name\n[5] Count goats by color\n[6] Show the youngest goat\n[7] Show the oldest goat\n[8] Show total herd age\n[9] Check for goats older than an age\n[10] Quit\n";
+    int choice = 10;
+    read_number("Choice --> ", 1, 10, choice);
     return choice;
 }
 
@@ -222,4 +231,16 @@ void total_age(const list<Goat> &trip) {
             return sum + goat.get_age();
         });
     cout << "Total herd age: " << total << '\n';
+}
+
+// check whether at least one goat is older than the given age
+void any_older(const list<Goat> &trip, int age) {
+    if (trip.empty()) {
+        cout << "No goats in the herd.\n";
+        return;
+    }
+    bool found = any_of(trip.begin(), trip.end(), [age](const Goat &goat) {
+        return goat.get_age() > age;
+    });
+    cout << "Any goats older than " << age << "? " << (found ? "Yes" : "No") << '\n';
 }
