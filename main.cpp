@@ -21,6 +21,7 @@ void delete_goat(list<Goat> &trip);
 void add_goat(list<Goat> &trip, const string names[], const string colors[]);
 void display_trip(const list<Goat> &trip);
 void find_goat(const list<Goat> &trip, const string &name);
+void count_goats(const list<Goat> &trip, const string &color);
 int main_menu();
 
 int main() {
@@ -42,7 +43,7 @@ int main() {
     }
 
     int choice;
-    while ((choice = main_menu()) != 5) {
+    while ((choice = main_menu()) != 6) {
         switch (choice) {
             case 1:
                 add_goat(trip, names, colors);
@@ -60,6 +61,15 @@ int main() {
                     return 0;
                 }
                 find_goat(trip, name);
+                break;
+            }
+            case 5: {
+                string color;
+                cout << "Goat color: ";
+                if (!getline(cin, color)) {
+                    return 0;
+                }
+                count_goats(trip, color);
                 break;
             }
         }
@@ -98,9 +108,9 @@ bool read_number(const string &prompt, int low, int high, int &value) {
 int main_menu() {
     cout << "\n*** GOAT MANAGER ***\n"
          << "[1] Add a goat\n[2] Delete a goat\n[3] List goats\n"
-         << "[4] Find a goat by name\n[5] Quit\n";
-    int choice = 5;
-    read_number("Choice --> ", 1, 5, choice);
+         << "[4] Find a goat by name\n[5] Count goats by color\n[6] Quit\n";
+    int choice = 6;
+    read_number("Choice --> ", 1, 6, choice);
     return choice;
 }
 
@@ -156,4 +166,12 @@ void find_goat(const list<Goat> &trip, const string &name) {
         cout << it->get_name() << " (" << it->get_age() << ", "
              << it->get_color() << ")\n";
     }
+}
+
+// count every goat with an exact color match
+void count_goats(const list<Goat> &trip, const string &color) {
+    auto count = count_if(trip.begin(), trip.end(), [&color](const Goat &goat) {
+        return goat.get_color() == color;
+    });
+    cout << "Goats with color " << color << ": " << count << '\n';
 }
