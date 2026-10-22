@@ -28,6 +28,7 @@ void oldest_goat(const list<Goat> &trip);
 void total_age(const list<Goat> &trip);
 void any_older(const list<Goat> &trip, int age);
 void all_at_least(const list<Goat> &trip, int age);
+void reverse_herd(list<Goat> &trip);
 int main_menu();
 
 int main() {
@@ -49,7 +50,7 @@ int main() {
     }
 
     int choice;
-    while ((choice = main_menu()) != 11) {
+    while ((choice = main_menu()) != 12) {
         switch (choice) {
             case 1:
                 add_goat(trip, names, colors);
@@ -103,6 +104,9 @@ int main() {
                 all_at_least(trip, age);
                 break;
             }
+            case 11:
+                reverse_herd(trip);
+                break;
         }
     }
     cout << "Goodbye!\n";
@@ -138,10 +142,20 @@ bool read_number(const string &prompt, int low, int high, int &value) {
 
 int main_menu() {
     cout << "\n*** GOAT MANAGER ***\n"
-         << "[1] Add a goat\n[2] Delete a goat\n[3] List goats\n"
-         << "[4] Find a goat by name\n[5] Count goats by color\n[6] Show the youngest goat\n[7] Show the oldest goat\n[8] Show total herd age\n[9] Check for goats older than an age\n[10] Check whether all goats meet a minimum age\n[11] Quit\n";
-    int choice = 11;
-    read_number("Choice --> ", 1, 11, choice);
+         << "[1] Add a goat\n"
+         << "[2] Delete a goat\n"
+         << "[3] List goats\n"
+         << "[4] Find a goat by name\n"
+         << "[5] Count goats by color\n"
+         << "[6] Show the youngest goat\n"
+         << "[7] Show the oldest goat\n"
+         << "[8] Show total herd age\n"
+         << "[9] Check for goats older than an age\n"
+         << "[10] Check whether all goats meet a minimum age\n"
+         << "[11] Reverse the herd\n"
+         << "[12] Quit\n";
+    int choice = 12;
+    read_number("Choice --> ", 1, 12, choice);
     return choice;
 }
 
@@ -264,4 +278,10 @@ void all_at_least(const list<Goat> &trip, int age) {
         return goat.get_age() >= age;
     });
     cout << "All goats at least " << age << "? " << (meets_age ? "Yes" : "No") << '\n';
+}
+
+// reverse the goat order and show the updated herd
+void reverse_herd(list<Goat> &trip) {
+    reverse(trip.begin(), trip.end());
+    display_trip(trip);
 }
