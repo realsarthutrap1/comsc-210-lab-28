@@ -7,6 +7,7 @@
 #include <iostream>
 #include <iterator>
 #include <list>
+#include <numeric>
 #include <sstream>
 #include <string>
 #include "Goat.h"
@@ -24,6 +25,7 @@ void find_goat(const list<Goat> &trip, const string &name);
 void count_goats(const list<Goat> &trip, const string &color);
 void youngest_goat(const list<Goat> &trip);
 void oldest_goat(const list<Goat> &trip);
+void total_age(const list<Goat> &trip);
 int main_menu();
 
 int main() {
@@ -45,7 +47,7 @@ int main() {
     }
 
     int choice;
-    while ((choice = main_menu()) != 8) {
+    while ((choice = main_menu()) != 9) {
         switch (choice) {
             case 1:
                 add_goat(trip, names, colors);
@@ -79,6 +81,9 @@ int main() {
                 break;
             case 7:
                 oldest_goat(trip);
+                break;
+            case 8:
+                total_age(trip);
                 break;
         }
     }
@@ -116,9 +121,9 @@ bool read_number(const string &prompt, int low, int high, int &value) {
 int main_menu() {
     cout << "\n*** GOAT MANAGER ***\n"
          << "[1] Add a goat\n[2] Delete a goat\n[3] List goats\n"
-         << "[4] Find a goat by name\n[5] Count goats by color\n[6] Show the youngest goat\n[7] Show the oldest goat\n[8] Quit\n";
-    int choice = 8;
-    read_number("Choice --> ", 1, 8, choice);
+         << "[4] Find a goat by name\n[5] Count goats by color\n[6] Show the youngest goat\n[7] Show the oldest goat\n[8] Show total herd age\n[9] Quit\n";
+    int choice = 9;
+    read_number("Choice --> ", 1, 9, choice);
     return choice;
 }
 
@@ -208,4 +213,13 @@ void oldest_goat(const list<Goat> &trip) {
     });
     cout << "Oldest goat: " << it->get_name() << " (" << it->get_age()
          << ", " << it->get_color() << ")\n";
+}
+
+// add every goat's age without changing the herd
+void total_age(const list<Goat> &trip) {
+    long long total = accumulate(trip.begin(), trip.end(), 0LL,
+        [](long long sum, const Goat &goat) {
+            return sum + goat.get_age();
+        });
+    cout << "Total herd age: " << total << '\n';
 }
