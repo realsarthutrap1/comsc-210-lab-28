@@ -1,0 +1,4 @@
+lab28
+*.exe
+*.dSYM/
+.DS_Store
